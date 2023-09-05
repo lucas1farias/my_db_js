@@ -14,22 +14,13 @@
             color: white;
         }
 
-        #hint-link {
-            background-color: orangered;
-            padding: 1rem;
-            border: black solid 2px;
-            box-shadow: 0 0 .4rem orange;
-            color: white;
-            text-decoration: none;
-        }
-
         input {
             background-color: black;
             border: solid 1px yellowgreen;
-            padding: 1rem;
+            padding: .5rem;
             color: yellowgreen;
             box-shadow: 0 0 2rem yellowgreen;
-            font-size: 1.5rem;
+            font-size: 1.2rem;
             outline: none;
         }
 
@@ -39,22 +30,13 @@
             color: crimson;
         }
 
-        .flex {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            gap: 1rem;
-            min-height: 80vh;
-        }
-
-        .flex-row2 {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: .5rem;
-            min-height: 50vh;
-            /* flex-wrap: wrap; */
+        #hint-link {
+            background-color: orangered;
+            padding: 1rem;
+            border: black solid 2px;
+            box-shadow: 0 0 .4rem orange;
+            color: white;
+            text-decoration: none;
         }
 
         .flex-row {
@@ -62,31 +44,35 @@
             align-items: center;
             justify-content: center;
             gap: 1rem;
+            flex-wrap: wrap;
         }
 
         .ink {
             background-color: crimson;
         }
+
+        .utils {
+            min-height: 40vh;
+        }
 </style>
 </head>
 <body>
-    <div class="flex-row">
+    <div class="flex-row utils">
         <span>Frase número: <span id="stc-number"></span></span>
         <a id="hint-link" href="#">revelar dica</a>
-        
     </div>
     <!-- Div que recebe divs aninhadas via js -->
-    <div id="container" class="flex-row2"></div>
+    <div id="container" class="flex-row"></div>
     
     <!-- Div que mostra a dica sobre a frase escolhida -->
-    <div class="hint-div flex-row">
+    <div class="flex-row hint-div">
         <p id="hint"></p>
     </div>
     
     <!-- Formulário para inserir a resposta -->
     <div class="form flex-row">
         <form>
-            <input type="text" size="70" placeholder="Digite sua resposta" id="answer">
+            <input type="text" placeholder="Digite sua resposta" id="answer">
         </form>
     </div>
 
@@ -96,7 +82,7 @@
             return Math.floor(Math.random() * (max - min) + min)
         }
 
-        function change_array_i_order(array) {
+        function shuffleArray(array) {
             for (let i = 0; i < array.length; i++) {
                 let new_i = random_i(0, array.length)
                 const pos_inicial = array[i]
@@ -218,7 +204,7 @@
                 }
             })
         }
-
+        
         const container = document.getElementById("container")
         const sentenceId = document.getElementById("stc-number")
         const answerInput = document.getElementById("answer")
@@ -231,51 +217,51 @@
             new LinkingWord("If video games were created by women, the violence would be reduced."),
             new LinkingWord("A black person grows up in this country and in many places."),
             new LinkingWord("The party was very noisy, although their baby slept all night long."),  
-            new LinkingWord("She wasn't rich, however, she donated money to charity every month."),
+            new LinkingWord("She was not rich, however, she donated money to charity every month."),
             new LinkingWord("He left early because he wanted to arrive home before his brother."),
             new LinkingWord("You can go out tonight if you are back before 10 p.m."),
-            new LinkingWord("I'll grab a sandwich as you fill up the tank at the gas station."),
+            new LinkingWord("I will grab a sandwich as you fill up the tank at the gas station."),
             new LinkingWord("She loves to read and she also enjoys painting."),
             new LinkingWord("He wanted to go to the party but he had to finish his homework."),
-            new LinkingWord("If you study hard, you'll pass the exam."),
-            new LinkingWord("She was exhausted, however, she didn't give up."),
-            new LinkingWord("He enjoys swimming, although he's not very good at it."),
+            new LinkingWord("If you study hard, you will pass the exam."),
+            new LinkingWord("She was exhausted, however, she did not give up."),
+            new LinkingWord("He enjoys swimming, although he is not very good at it."),
             new LinkingWord("Because it was raining heavily, we decided to stay indoors."),
-            new LinkingWord("He couldn't attend the meeting because he was feeling unwell."),
-            new LinkingWord("I have failed repeatedly, however, I haven't given up on my dreams."),
+            new LinkingWord("He could not attend the meeting because he was feeling unwell."),
+            new LinkingWord("I have failed repeatedly, however, I have not given up on my dreams."),
             new LinkingWord("Life is full of challenges because they help us grow stronger."),
             new LinkingWord("She decided to take the risk, although she was afraid of failure."),
             new LinkingWord("You can achieve anything, if you believe in yourself."),
             new LinkingWord("He missed the train, however, he managed to arrive on time."),
-            new LinkingWord("She couldn't attend the party because she was feeling unwell."),
-            new LinkingWord("Although it's difficult, never stop pursuing your goals."),
+            new LinkingWord("She could not attend the party because she was feeling unwell."),
+            new LinkingWord("Although it is difficult, never stop pursuing your goals."),
             new LinkingWord("She loves to read novels, but she also enjoys watching movies."),
-            new LinkingWord("He couldn't attend the meeting because he had a family emergency."),
-            new LinkingWord("If you study hard, you'll achieve good grades."),
+            new LinkingWord("He could not attend the meeting because he had a family emergency."),
+            new LinkingWord("If you study hard, you will achieve good grades."),
             new LinkingWord("Although it was raining heavily, they decided to go for a walk."),
             new LinkingWord("The restaurant had excellent reviews; however, the prices were quite high."),
-            new LinkingWord("She's a talented musician, but she's still learning to play the piano."),
-            new LinkingWord("He's a vegetarian, because he cares about animal welfare."),
-            new LinkingWord("She loves hinking, although she's afraid of heights."),
-            new LinkingWord("He wanted to buy the new phone, however, he didn't have enough money."),
+            new LinkingWord("She is a talented musician, but she is still learning to play the piano."),
+            new LinkingWord("He is a vegetarian, because he cares about animal welfare."),
+            new LinkingWord("She loves hinking, although she is afraid of heights."),
+            new LinkingWord("He wanted to buy the new phone, however, he did not have enough money."),
             new LinkingWord("The event was canceled because of bad weather."),
             new LinkingWord("She studies hard as she wants to get a scholarship."),
-            new LinkingWord("He'll join the team if he meets the fitness requirements."),
+            new LinkingWord("He will join the team if he meets the fitness requirements."),
             new LinkingWord("Although it rained, we still went to the party."),
             new LinkingWord("They went to the beach, although the weather was cloudy."),
             new LinkingWord("Although I studied, the test was still difficult."),
-            new LinkingWord("I wanted to go to the cinema, but I'm too busy."),
-            new LinkingWord("She loves chocolate, but she can't eat it due to allergies."),
+            new LinkingWord("I wanted to go to the cinema, but I am too busy."),
+            new LinkingWord("She loves chocolate, but she cannot eat it due to allergies."),
             new LinkingWord("I was tired, but I decided to go to the gym anyway."),
-            new LinkingWord("I know it's a challenge; however, I'm willing to try."),
-            new LinkingWord("I didn't expect the outcome; however, I was surprised and happy."),
+            new LinkingWord("I know it is a challenge; however, I am willing to try."),
+            new LinkingWord("I did not expect the outcome; however, I was surprised and happy."),
             new LinkingWord("He is an excellent player. However, he needs to improve his endurance."),
             new LinkingWord("If it rains tomorrow, the picnic will be canceled."),
             new LinkingWord("We would have serious problems if people cared about the environment."),
             new LinkingWord("We would go out for dinner if my brother came earlier."),
-            new LinkingWord("I didn't talk to my friend and he noticed it."),
+            new LinkingWord("I did not talk to my friend and he noticed it."),
             new LinkingWord("My friends entered the room and they found something scary."),
-            new LinkingWord("He's talented, but sometimes lacks self-confidence.")
+            new LinkingWord("He is talented, but sometimes lacks self-confidence.")
         ]
         
         const stcIndex = getSentenceIndex(linkingWords)  
@@ -284,7 +270,7 @@
         const stcSize = stcList.length 
         const answer = stcList.join(" ")
 
-        change_array_i_order(stcCopy)
+        shuffleArray(stcCopy)
         new Div(container, stcSize).create()   // criar tags equivalentes ao tamanho da frase selecionada     
         sentenceId.textContent = stcIndex + 1  // mostrar o índice da frase no array de frases
 
