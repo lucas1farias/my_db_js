@@ -1,0 +1,92 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matriz</title>
+    <style>
+        body {
+            background-color: #222;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .flex {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: row;
+        }
+        
+    </style>
+</head>
+<body>
+    <main>
+        <div>
+            <div id="matriz" class="flex">
+
+            </div>
+        </div>
+    </main>
+    <script>
+        const matriz = document.getElementById('matriz')
+        
+        function criarGrid(tag_pai, giros, dimensoes, nome_fixo_tags_filhas, nome_tag_container) {
+            /*
+              Como funciona?
+              Já deve existir na HTML uma tag que guardará um grid feito pela função
+              A tag aqui é a tag cujo id="matriz" que está sendo passada como parâmetro 2
+              Na função uma outra tag div é criada e nela é inserido um conjunto de outras divs (tag_container, tag_unidade)
+              Os conjuntos de tags filhas recebem uma formatação mínima (dimensões e nome de classe)
+              Para add outras formatações, fazer por fora
+            */
+            const array = []
+            const tag_container = document.createElement('div')
+            tag_container.className = nome_tag_container
+            
+            for (let i = 0; i < giros; i++) {
+                const tag_unidade = document.createElement('div')
+                
+                tag_unidade.className = nome_fixo_tags_filhas
+                tag_unidade.style.minHeight = dimensoes[0]
+                tag_unidade.style.minWidth = dimensoes[1]
+                tag_unidade.style.maxHeight = dimensoes[2]
+                tag_unidade.style.maxWidth = dimensoes[3]
+                
+                tag_container.appendChild(tag_unidade)
+            }
+            
+            tag_pai.appendChild(tag_container)
+        }
+      
+        function criar_multiplos_elementos(callback, tag_pai, giros, giros_callback, dimensoes, nome_fixo_tags_filhas) {
+            for (let i = 0; i < giros; i++) {
+                callback(tag_pai, giros_callback, dimensoes, nome_fixo_tags_filhas)
+            }
+        }
+        
+        function add_estilos_especificos(array) {
+            array.forEach(el => {
+                el.style.border = 'black solid 1px'
+                el.style.backgroundColor = '#444'
+                el.style.padding = '1rem'
+                el.style.margin = '.10rem'
+                el.style.fontWeight = 'bold'
+                el.style.fontSize = '.8rem'
+                el.style.overflow = 'hidden'
+                el.style.textAlign = "center"
+            })
+        }
+        
+        criar_multiplos_elementos(criarGrid, matriz, 5, 8, ['30px', '60px', '30px', '60px'], 'child', 'container')
+        add_estilos_especificos(document.querySelectorAll('.child'))
+        
+    </script>
+</body>
+</html>
+

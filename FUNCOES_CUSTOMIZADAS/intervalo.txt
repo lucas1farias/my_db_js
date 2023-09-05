@@ -1,0 +1,24 @@
+
+
+intervalo_for(min, max) = [
+    '[]', '[] inc', '< (não inclusivo)', '++'
+]
+
+intervalo_while(min, max) = [
+    '[]', '[] inc', '< (não inclusivo)', '++'
+]
+
+intervalo_for_built_in(min, max) = [
+    '[]', '<', "push"
+]
+
+intervalo_while_built_in(min, max) = [
+    '[]', '<', "push"
+]
+
+console.log('\n========== MINHA VERSÃO ==========')
+console.log(intervalo_for(1, 4))
+console.log(intervalo_while(1, 4))
+console.log('========== VERSÃO COM USO DE BUILT-INS ==========')
+console.log(intervalo_for_built_in(1, 4))
+console.log(intervalo_while_built_in(1, 4))

@@ -1,0 +1,12 @@
+
+
+codigo_alfabeto(letra='a', codigo=97, obter_codigo) = """
+    . tamanho
+    . 4 arrays (intervalos e letras)
+    . 2 condições (se é conversão de letra p/ código ou inverso)
+    . 2 vars internas (receber código ou letra)
+    . 4 fors (a parada pode ser qualquer um dos arrays)
+    . 2 retornos
+    . A função é usada em nível de "caractere"
+    . Para uso em string, criar função de repetição recursiva
+"""

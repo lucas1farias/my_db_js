@@ -1,0 +1,307 @@
+﻿
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Second Conditional</title>
+    <style>
+        body {
+            font-family: consolas;
+            background-color: #222;
+            color: white;
+        }
+
+        input {
+            background-color: black;
+            border: solid 1px yellowgreen;
+            padding: 1rem;
+            color: yellowgreen;
+            box-shadow: 0 0 2rem yellowgreen;
+            font-size: 1.5rem;
+            outline: none;
+        }
+
+        .flex {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 1rem;
+            min-height: 80vh;
+        }
+
+        .flex-row2 {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: .5rem;
+            min-height: 50vh;
+            /* flex-wrap: wrap; */
+        }
+
+        .flex-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+</style>
+</head>
+<body>
+    <div class="flex-row">
+        <span>Frase número: <span id="stc-number"></span></span>
+    </div>
+    <div id="container" class="flex-row2"></div>
+    
+    <div class="form flex-row">
+        <form>
+            <input type="text" size="70" placeholder="Digite sua resposta" id="answer">
+        </form>
+    </div>
+
+    <script>
+        function as_list(string) {
+            return string.split(" ")
+        }
+
+        function random_i(min, max) {
+            return Math.floor(Math.random() * (max - min) + min)
+        }
+
+        function change_array_i_order(array) {
+            for (let i = 0; i < array.length; i++) {
+                let new_i = random_i(0, array.length)
+                const pos_inicial = array[i]
+                array[i] = array[new_i]
+                array[new_i] = pos_inicial
+            }
+        }
+        
+        function createDiv(container, size) {
+            for (let i = 0; i < size; i++) {
+                const newDiv = document.createElement('div')
+                newDiv.className = "letter"
+                newDiv.style.border = "white solid 1px"
+                newDiv.style.height = "2rem"
+                newDiv.style.width = "7rem"
+                newDiv.style.textAlign = "center"
+                container.appendChild(newDiv)
+            } 
+        }
+
+        const container = document.getElementById("container")
+        const sentence_id = document.getElementById("stc-number")
+
+        /*
+            {
+                stc: as_list(),
+                stc_cpy: as_list(),
+            },
+        */
+
+        const secondConditional = [          
+            {
+                stc: as_list("If I liked vegetables, I would become a vegetarian."),
+                stc_cpy: as_list("If I liked vegetables, I would become a vegetarian."),
+            },
+            {
+                stc: as_list("They would enjoy school more if the lessons were more fun."),
+                stc_cpy: as_list("They would enjoy school more if the lessons were more fun.")
+            },
+            {
+                stc: as_list("Our cat wouldn't be so fat if we didn't feed it so much."),
+                stc_cpy: as_list("Our cat wouldn't be so fat if we didn't feed it so much.")
+            },
+            {
+                stc: as_list("If I got another pet, I would get a turtle."),
+                stc_cpy: as_list("If I got another pet, I would get a turtle.")
+            },
+            {
+                stc: as_list("If I won the lottery, I would travel around the world."),
+                stc_cpy: as_list("If I won the lottery, I would travel around the world."),
+            },
+            {
+                stc: as_list("If she studied harder, she would pass the exam."),
+                stc_cpy: as_list("If she studied harder, she would pass the exam."),
+            },
+            {
+                stc: as_list("If it rained tomorrow, we would stay indoors and watch movies."),
+                stc_cpy: as_list("If it rained tomorrow, we would stay indoors and watch movies."),
+            },
+            {
+                stc: as_list("If I had more time, I would learn to play the piano."),
+                stc_cpy: as_list("If I had more time, I would learn to play the piano."),
+            },
+            {
+                stc: as_list("If they visited Paris, they would see the Eiffel Tower."),
+                stc_cpy: as_list("If they visited Paris, they would see the Eiffel Tower."),
+            },
+            {
+                stc: as_list("If I were you, I would apologize."),
+                stc_cpy: as_list("If I were you, I would apologize."),
+            },
+            {
+                stc: as_list("If he had enough money, he would buy a sports car."),
+                stc_cpy: as_list("If he had enough money, he would buy a sports car."),
+            },
+            {
+                stc: as_list("If the weather was better, we would go for a picnic."),
+                stc_cpy: as_list("If the weather was better, we would go for a picnic."),
+            },
+            {
+                stc: as_list("If I knew the answer, I would tell you."),
+                stc_cpy: as_list("If I knew the answer, I would tell you."),
+            },
+            {
+                stc: as_list("If she had the recipe, she would bake a delicious cake."),
+                stc_cpy: as_list("If she had the recipe, she would bake a delicious cake."),
+            },
+            {
+                stc: as_list("She would pass the exam if she studied harder."),
+                stc_cpy: as_list("She would pass the exam if she studied harder."),
+            },
+            {
+                stc: as_list("We would stay indoors and watch movies if it rained tomorrow."),
+                stc_cpy: as_list("We would stay indoors and watch movies if it rained tomorrow."),
+            },
+            {
+                stc: as_list("I would learn to play the piano if I had more time."),
+                stc_cpy: as_list("I would learn to play the piano if I had more time."),
+            },
+            {
+                stc: as_list("They would see the Eiffel Tower if they visited Paris."),
+                stc_cpy: as_list("They would see the Eiffel Tower if they visited Paris."),
+            },
+            {
+                stc: as_list("He would buy a sports car if he had enough money."),
+                stc_cpy: as_list("He would buy a sports car if he had enough money."),
+            },
+            {
+                stc: as_list("We would go for a picnic if the weather was better."),
+                stc_cpy: as_list("We would go for a picnic if the weather was better."),
+            },
+            {
+                stc: as_list("I would tell you if I knew the answer."),
+                stc_cpy: as_list("I would tell you if I knew the answer."),
+            },
+            {
+                stc: as_list("She would bake a delicious cake if she had the recipe."),
+                stc_cpy: as_list("She would bake a delicious cake if she had the recipe."),
+            },
+            {
+                stc: as_list("If I had a million dollars, I would buy a big house."),
+                stc_cpy: as_list("If I had a million dollars, I would buy a big house."),
+            },  
+            {
+                stc: as_list("If she knew how to cook, she would prepare a gourmet meal."),
+                stc_cpy: as_list("If she knew how to cook, she would prepare a gourmet meal."),
+            },
+            {
+                stc: as_list("If he were a bird, he would fly across the sky."),
+                stc_cpy: as_list("If he were a bird, he would fly across the sky."),
+            },
+            {
+                stc: as_list("If they didn't have to work tomorrow, they would go to the beach."),
+                stc_cpy: as_list("If they didn't have to work tomorrow, they would go to the beach."),
+            },
+            {
+                stc: as_list("If it wasn't so cold outside, we would go for a hike."),
+                stc_cpy: as_list("If it wasn't so cold outside, we would go for a hike."),
+            },
+            {
+                stc: as_list("If my friend invited me to the party, I would definitely attend."),
+                stc_cpy: as_list("If my friend invited me to the party, I would definitely attend."),
+            },
+            {
+                stc: as_list("If I had a time machine, I would visit historical events."),
+                stc_cpy: as_list("If I had a time machine, I would visit historical events."),
+            },
+            {
+                stc: as_list("If they understood the instructions, they would assemble the furniture."),
+                stc_cpy: as_list("If they understood the instructions, they would assemble the furniture."),
+            },
+            {
+                stc: as_list("If it rained chocolate, I would grab an umbrella and enjoy!"),
+                stc_cpy: as_list("If it rained chocolate, I would grab an umbrella and enjoy!"),
+            },
+            {
+                stc: as_list("If I could speak any language, I would travel the world as a translator."),
+                stc_cpy: as_list("If I could speak any language, I would travel the world as a translator."),
+            },
+            {
+                stc: as_list("If we were in Rio today, we would be able to see the parade."),
+                stc_cpy: as_list("If we were in Rio today, we would be able to see the parade."),
+            },
+            {
+                stc: as_list("If I won a million dollars, I wouldn't spend it all"),
+                stc_cpy: as_list("If I won a million dollars, I wouldn't spend it all"),
+            },
+            {
+                stc: as_list("People in that area would get sick a lot less frequently if everyone had access to clean water."),
+                stc_cpy: as_list("People in that area would get sick a lot less frequently if everyone had access to clean water."),
+            },
+            {
+                stc: as_list("If people were more tolerant and respectful, there wouldn't be many wars in the world."),
+                stc_cpy: as_list("If people were more tolerant and respectful, there wouldn't be many wars in the world."),
+            },
+            {
+                stc: as_list("Vander wouldn't be looking for a new job if he didn't have to move to another city."),
+                stc_cpy: as_list("Vander wouldn't be looking for a new job if he didn't have to move to another city."),
+            }   
+        ]
+        
+        const index = random_i(0, secondConditional.length)   
+        const stc = secondConditional[index].stc
+        const stc_copy = secondConditional[index].stc_cpy
+        const stc_size = stc.length 
+        const answerInput = document.getElementById("answer")
+        let answer = stc.join(" ")
+        
+        change_array_i_order(stc_copy)
+        createDiv(container, stc_size)       // criar tags equivalentes ao tamanho da frase selecionada
+        sentence_id.textContent = index + 1  // mostrar o índice da frase no array de frases
+        
+        const allLetters = document.querySelectorAll(".letter")
+        
+        allLetters.forEach((tag, i) => {
+            tag.textContent = stc_copy[i]
+        })
+        
+        // Destacar tags das palavras ao clicar
+        allLetters.forEach((tag, i) => {
+            tag.addEventListener("click", () => {
+                if (tag.style.border === "1px solid white") {
+                    tag.style.border = "1px solid crimson"
+                } else if (tag.style.border = "1px solid crimson") {
+                    tag.style.border = "1px solid white"
+                }
+            })
+        })
+
+        setInterval(() => {
+            personAnwser = answerInput.value
+            
+            if (answerInput.value == answer) {
+                allLetters.forEach((tag, i) => {
+                    tag.style.backgroundColor = "mediumseagreen"
+                    tag.style.boxShadow = "0 0 1rem mediumseagreen"
+                    tag.style.color = "black"
+                    tag.style.fontWeight = "bold"
+                    tag.style.border = "1px solid white"
+                })
+            }
+            else {
+                allLetters.forEach((tag, i) => {
+                    tag.style.backgroundColor = "inherit"
+                    tag.style.boxShadow = "inherit"
+                    tag.style.color = "inherit"
+                    tag.style.fontWeight = "inherit"
+                })
+            }
+        }, 1000)
+        
+    </script>
+</body>
+</html>

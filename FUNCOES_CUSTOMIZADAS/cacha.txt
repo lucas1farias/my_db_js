@@ -1,0 +1,8 @@
+
+
+cacha(colecao, tipo) = """
+    . tamanho, intervalo, codigo_alfabeto
+    . a função "codigo_alfabeto" é usado de forma recursiva e inversa
+    . com base no código, cálculos de - e + definem o tipo de cacha
+    . "tipo" pode ser feito com op. ternário
+"""

@@ -1,0 +1,28 @@
+
+
+contido_sem_ordem(colecao_menor, colecao_maior) = """
+    . tamanho, contido, diferentes
+    . as duas coleções são de tamanhos != e precisam de loops !=
+    . ao final, a coleção menor deve ter tamanho == tamanho da coleção maior (sem chars repetidos)
+"""
+
+const alfabeto = 'abcdefghijklmnopqrstuvwxyz'
+const alfabeto_e_numeros = 'abcdefghijklmnopqrstuvwxyz0123456789'
+
+console.log('========== MINHA VERSÃO ==========')
+console.log([1], contido_sem_ordem('ba', diferentes('banana')))
+console.log([2], contido_sem_ordem('ban', diferentes('banana')))
+console.log([3], contido_sem_ordem('str', diferentes('sortear')))
+console.log([4], contido_sem_ordem(alfabeto, diferentes(alfabeto_e_numeros)))
+console.log(contido_sem_ordem('bax', diferentes('banana')))   
+console.log(contido_sem_ordem('strj', diferentes('sortear')))                  
+console.log(contido_sem_ordem(alfabeto + '_', diferentes(alfabeto_e_numeros))) 
+
+console.log('========== VERSÃO COM USO DE BUILT-INS ==========')
+console.log([1], contido_sem_ordem_built_in('ba', diferentes('banana')))
+console.log([2], contido_sem_ordem_built_in('ban', diferentes('banana')))
+console.log([3], contido_sem_ordem_built_in('str', diferentes('sortear')))
+console.log([4], contido_sem_ordem_built_in(alfabeto, diferentes(alfabeto_e_numeros)))
+console.log(contido_sem_ordem_built_in('bax', diferentes('banana')))   
+console.log(contido_sem_ordem_built_in('strj', diferentes('sortear')))                  
+console.log(contido_sem_ordem_built_in(alfabeto + '_', diferentes(alfabeto_e_numeros)))

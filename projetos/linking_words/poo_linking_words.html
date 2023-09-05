@@ -1,0 +1,309 @@
+
+
+<!-- Porque os estilos não estão sendo aplciados quando a entrada for igual a frase? -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linking Words</title>
+    <style>
+        body {
+            font-family: consolas;
+            background-color: #222;
+            color: white;
+        }
+
+        #hint-link {
+            background-color: orangered;
+            padding: 1rem;
+            border: black solid 2px;
+            box-shadow: 0 0 .4rem orange;
+            color: white;
+            text-decoration: none;
+        }
+
+        input {
+            background-color: black;
+            border: solid 1px yellowgreen;
+            padding: 1rem;
+            color: yellowgreen;
+            box-shadow: 0 0 2rem yellowgreen;
+            font-size: 1.5rem;
+            outline: none;
+        }
+
+        #hint {
+            font-weight: bold;
+            font-size: 1.1rem;
+            color: crimson;
+        }
+
+        .flex {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 1rem;
+            min-height: 80vh;
+        }
+
+        .flex-row2 {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: .5rem;
+            min-height: 50vh;
+            /* flex-wrap: wrap; */
+        }
+
+        .flex-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .ink {
+            background-color: crimson;
+        }
+</style>
+</head>
+<body>
+    <div class="flex-row">
+        <span>Frase número: <span id="stc-number"></span></span>
+        <a id="hint-link" href="#">revelar dica</a>
+        
+    </div>
+    <!-- Div que recebe divs aninhadas via js -->
+    <div id="container" class="flex-row2"></div>
+    
+    <!-- Div que mostra a dica sobre a frase escolhida -->
+    <div class="hint-div flex-row">
+        <p id="hint"></p>
+    </div>
+    
+    <!-- Formulário para inserir a resposta -->
+    <div class="form flex-row">
+        <form>
+            <input type="text" size="70" placeholder="Digite sua resposta" id="answer">
+        </form>
+    </div>
+
+    <script>
+
+        function random_i(min, max) {
+            return Math.floor(Math.random() * (max - min) + min)
+        }
+
+        function change_array_i_order(array) {
+            for (let i = 0; i < array.length; i++) {
+                let new_i = random_i(0, array.length)
+                const pos_inicial = array[i]
+                array[i] = array[new_i]
+                array[new_i] = pos_inicial
+            }
+        }
+        
+        class Div {
+            constructor(container, size) {
+                this.container = container
+                this.size = size
+            }
+            
+            create(container, size) {
+                for (let i = 0; i < this.size; i++) {
+                    const newDiv = document.createElement('div')
+                    this.setMainQueryClass(newDiv, "eachWord")
+                    this.groupStyle(newDiv)
+                    this.container.appendChild(newDiv)
+                } 
+            }
+            
+            // Usado na função "create"
+            groupStyle(el) {
+                el.style.border = "white solid 1px"
+                el.style.height = "2rem"
+                el.style.width = "7rem"
+                el.style.textAlign = "center"
+            }
+
+            setMainQueryClass(el, name) {
+                el.className = name
+            }
+        }
+
+        class LinkingWord {
+            constructor(sentence) {
+                this.sentence = sentence
+            }
+
+            asList() {
+                return this.sentence.split(" ")
+            }
+
+            copy(linkingWordArray, i) {
+                const targetSentence = linkingWordArray[i]
+                return targetSentence.asList()
+            }
+        }
+
+        function getSentenceIndex(source) {
+            return random_i(0, source.length)
+        }
+
+        function makeSentenceList(source, i) {
+            return source[i].asList()
+        }
+
+        function addGroupEventListener(querySet) {
+            querySet.forEach((tag, i) => {
+                tag.addEventListener("click", () => {
+                    if (tag.style.border === "1px solid white") {
+                        tag.style.border = "1px solid crimson"
+                    } else if (tag.style.border = "1px solid crimson") {
+                        tag.style.border = "1px solid white"
+                    }
+                })
+            })
+        }
+
+        function checkCorrectAnswer(inputEl, sentence, querySet) {
+            if (inputEl.value == sentence) {
+                querySet.forEach((tag, i) => {
+                    tag.style.transition = "linear 1s"
+                    tag.style.backgroundColor = "mediumseagreen"
+                    tag.style.boxShadow = "0 0 1rem mediumseagreen"
+                    tag.style.color = "black"
+                    tag.style.fontWeight = "bold"
+                    tag.style.border = "1px solid white"
+                })
+            }
+        }
+
+        function checkIncorrectAnswer(inputEl, sentence, querySet) {
+            if (inputEl.value != sentence) {
+                querySet.forEach((tag, i) => {
+                    tag.style.backgroundColor = "inherit"
+                    tag.style.boxShadow = "inherit"
+                    tag.style.color = "inherit"
+                    tag.style.fontWeight = "inherit"
+                })
+            }
+        }
+
+        function giveHint(sentence, i) {
+            let string = ""
+            return string += `${sentence[i]} ${sentence[i + 1]} ${sentence[i + 2]}`
+        }
+        
+        // Função não dinâmica
+        function manageHintCreation() {
+            // O índice escolhido da frase em forma de lista não pode exceder a repr. da metade da frase
+            const indexThreshold = Math.floor(stcList.length / 2)
+            let randomIndex = random_i(0, stcList.length)
+            
+            // Caso o cenário acima aconteça, um novo valor será criado até que seja satisfeito
+            while (randomIndex > indexThreshold) {
+                randomIndex = random_i(0, stcList.length)
+            }
+
+            // A dica é criada em forma de string
+            const sentenceCell = giveHint(stcList, randomIndex)
+            
+            // E lançada como conteúdo de uma tag ao clicar na tag de link que a revela
+            hintElLink.addEventListener("click", () => {
+                if (hintEl.textContent === "") {
+                    hintEl.textContent = sentenceCell
+                }
+            })
+        }
+
+        const container = document.getElementById("container")
+        const sentenceId = document.getElementById("stc-number")
+        const answerInput = document.getElementById("answer")
+        const hintEl = document.getElementById("hint")
+        const hintElLink = document.getElementById("hint-link")
+
+        const linkingWords = [          
+            new LinkingWord("If it was just in one's mind, it would be easy to overcome and change."),
+            new LinkingWord("Racism is still with us, and it is up to us to prepare our children."),
+            new LinkingWord("If video games were created by women, the violence would be reduced."),
+            new LinkingWord("A black person grows up in this country and in many places."),
+            new LinkingWord("The party was very noisy, although their baby slept all night long."),  
+            new LinkingWord("She wasn't rich, however, she donated money to charity every month."),
+            new LinkingWord("He left early because he wanted to arrive home before his brother."),
+            new LinkingWord("You can go out tonight if you are back before 10 p.m."),
+            new LinkingWord("I'll grab a sandwich as you fill up the tank at the gas station."),
+            new LinkingWord("She loves to read and she also enjoys painting."),
+            new LinkingWord("He wanted to go to the party but he had to finish his homework."),
+            new LinkingWord("If you study hard, you'll pass the exam."),
+            new LinkingWord("She was exhausted, however, she didn't give up."),
+            new LinkingWord("He enjoys swimming, although he's not very good at it."),
+            new LinkingWord("Because it was raining heavily, we decided to stay indoors."),
+            new LinkingWord("He couldn't attend the meeting because he was feeling unwell."),
+            new LinkingWord("I have failed repeatedly, however, I haven't given up on my dreams."),
+            new LinkingWord("Life is full of challenges because they help us grow stronger."),
+            new LinkingWord("She decided to take the risk, although she was afraid of failure."),
+            new LinkingWord("You can achieve anything, if you believe in yourself."),
+            new LinkingWord("He missed the train, however, he managed to arrive on time."),
+            new LinkingWord("She couldn't attend the party because she was feeling unwell."),
+            new LinkingWord("Although it's difficult, never stop pursuing your goals."),
+            new LinkingWord("She loves to read novels, but she also enjoys watching movies."),
+            new LinkingWord("He couldn't attend the meeting because he had a family emergency."),
+            new LinkingWord("If you study hard, you'll achieve good grades."),
+            new LinkingWord("Although it was raining heavily, they decided to go for a walk."),
+            new LinkingWord("The restaurant had excellent reviews; however, the prices were quite high."),
+            new LinkingWord("She's a talented musician, but she's still learning to play the piano."),
+            new LinkingWord("He's a vegetarian, because he cares about animal welfare."),
+            new LinkingWord("She loves hinking, although she's afraid of heights."),
+            new LinkingWord("He wanted to buy the new phone, however, he didn't have enough money."),
+            new LinkingWord("The event was canceled because of bad weather."),
+            new LinkingWord("She studies hard as she wants to get a scholarship."),
+            new LinkingWord("He'll join the team if he meets the fitness requirements."),
+            new LinkingWord("Although it rained, we still went to the party."),
+            new LinkingWord("They went to the beach, although the weather was cloudy."),
+            new LinkingWord("Although I studied, the test was still difficult."),
+            new LinkingWord("I wanted to go to the cinema, but I'm too busy."),
+            new LinkingWord("She loves chocolate, but she can't eat it due to allergies."),
+            new LinkingWord("I was tired, but I decided to go to the gym anyway."),
+            new LinkingWord("I know it's a challenge; however, I'm willing to try."),
+            new LinkingWord("I didn't expect the outcome; however, I was surprised and happy."),
+            new LinkingWord("He is an excellent player. However, he needs to improve his endurance."),
+            new LinkingWord("If it rains tomorrow, the picnic will be canceled."),
+            new LinkingWord("We would have serious problems if people cared about the environment."),
+            new LinkingWord("We would go out for dinner if my brother came earlier."),
+            new LinkingWord("I didn't talk to my friend and he noticed it."),
+            new LinkingWord("My friends entered the room and they found something scary."),
+            new LinkingWord("He's talented, but sometimes lacks self-confidence.")
+        ]
+        
+        const stcIndex = getSentenceIndex(linkingWords)  
+        const stcList = makeSentenceList(linkingWords, stcIndex)
+        const stcCopy = new LinkingWord("").copy(linkingWords, stcIndex)
+        const stcSize = stcList.length 
+        const answer = stcList.join(" ")
+
+        change_array_i_order(stcCopy)
+        new Div(container, stcSize).create()   // criar tags equivalentes ao tamanho da frase selecionada     
+        sentenceId.textContent = stcIndex + 1  // mostrar o índice da frase no array de frases
+
+        const eachWord = document.querySelectorAll(".eachWord")
+        
+        eachWord.forEach((tag, i) => {
+            tag.textContent = stcCopy[i]
+        })
+
+        // Marcar/desmarcar tags das palavras ao clicar nelas
+        addGroupEventListener(eachWord)
+        
+        // Criação de dicas
+        manageHintCreation()
+
+        setInterval(() => {
+            checkCorrectAnswer(answerInput, answer, eachWord)
+            checkIncorrectAnswer(answerInput, answer, eachWord)
+        }, 1000)
+    </script>
+</body>
+</html>

@@ -1,0 +1,363 @@
+﻿
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linking Words</title>
+    <style>
+        body {
+            font-family: consolas;
+            background-color: #222;
+            color: white;
+        }
+
+        input {
+            background-color: black;
+            border: solid 1px yellowgreen;
+            padding: 1rem;
+            color: yellowgreen;
+            box-shadow: 0 0 2rem yellowgreen;
+            font-size: 1.5rem;
+            outline: none;
+        }
+
+        .flex {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 1rem;
+            min-height: 80vh;
+        }
+
+        .flex-row2 {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: .5rem;
+            min-height: 50vh;
+            /* flex-wrap: wrap; */
+        }
+
+        .flex-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .ink {
+            background-color: crimson;
+        }
+</style>
+</head>
+<body>
+    <div class="flex-row">
+        <span>Frase número: <span id="stc-number"></span></span>
+    </div>
+    <div id="container" class="flex-row2"></div>
+    
+    <div class="form flex-row">
+        <form>
+            <input type="text" size="70" placeholder="Digite sua resposta" id="answer">
+        </form>
+    </div>
+
+    <script>
+        function as_list(string) {
+            return string.split(" ")
+        }
+
+        function random_i(min, max) {
+            return Math.floor(Math.random() * (max - min) + min)
+        }
+
+        function change_array_i_order(array) {
+            for (let i = 0; i < array.length; i++) {
+                let new_i = random_i(0, array.length)
+                const pos_inicial = array[i]
+                array[i] = array[new_i]
+                array[new_i] = pos_inicial
+            }
+        }
+        
+        function createDiv(container, size) {
+            for (let i = 0; i < size; i++) {
+                const newDiv = document.createElement('div')
+                newDiv.className = "letter"
+                newDiv.style.border = "white solid 1px"
+                newDiv.style.height = "2rem"
+                newDiv.style.width = "7rem"
+                newDiv.style.textAlign = "center"
+                container.appendChild(newDiv)
+            } 
+        }
+
+        const container = document.getElementById("container")
+        const sentence_id = document.getElementById("stc-number")
+
+        /*
+            {
+                stc: as_list(),
+                stc_cpy: as_list(),
+            },
+        */
+
+        const linkingWords = [          
+            {
+                stc: as_list("If it was just in one's mind, it would be easy to overcome and change."),
+                stc_cpy: as_list("If it was just in one's mind, it would be easy to overcome and change."),
+            },
+            {
+                stc: as_list("Racism is still with us, and it is up to us to prepare our children."),
+                stc_cpy: as_list("Racism is still with us, and it is up to us to prepare our children.")
+            },
+            {
+                stc: as_list("If video games were created by women, the violence would be reduced."),
+                stc_cpy: as_list("If video games were created by women, the violence would be reduced.")
+            },
+            {
+                stc: as_list("A black person grows up in this country and in many places."),
+                stc_cpy: as_list("A black person grows up in this country and in many places.")
+            },
+            {
+                stc: as_list("The party was very noisy, although their baby slept all night long."),
+                stc_cpy: as_list("The party was very noisy, although their baby slept all night long."),
+            },
+            {
+                stc: as_list("She wasn't rich, however, she donated money to charity every month."),
+                stc_cpy: as_list("She wasn't rich, however, she donated money to charity every month."),
+            },
+            {
+                stc: as_list("He left early because he wanted to arrive home before his brother."),
+                stc_cpy: as_list("He left early because he wanted to arrive home before his brother."),
+            },
+            {
+                stc: as_list("You can go out tonight if you are back before 10 p.m."),
+                stc_cpy: as_list("You can go out tonight if you are back before 10 p.m."),
+            },
+            {
+                stc: as_list("I'll grab a sandwich as you fill up the tank at the gas station."),
+                stc_cpy: as_list("I'll grab a sandwich as you fill up the tank at the gas station."),
+            },
+            {
+                stc: as_list("She loves to read and she also enjoys painting."),
+                stc_cpy: as_list("She loves to read and she also enjoys painting."),
+            },
+            {
+                stc: as_list("He wanted to go to the party but he had to finish his homework."),
+                stc_cpy: as_list("He wanted to go to the party but he had to finish his homework."),
+            },
+            {
+                stc: as_list("If you study hard, you'll pass the exam."),
+                stc_cpy: as_list("If you study hard, you'll pass the exam."),
+            },
+            {
+                stc: as_list("She was exhausted, however, she didn't give up."),
+                stc_cpy: as_list("She was exhausted, however, she didn't give up."),
+            },
+            {
+                stc: as_list("He enjoys swimming, although he's not very good at it."),
+                stc_cpy: as_list("He enjoys swimming, although he's not very good at it."),
+            },
+            {
+                stc: as_list("Because it was raining heavily, we decided to stay indoors."),
+                stc_cpy: as_list("Because it was raining heavily, we decided to stay indoors."),
+            },
+            {
+                stc: as_list("He couldn't attend the meeting because he was feeling unwell."),
+                stc_cpy: as_list("He couldn't attend the meeting because he was feeling unwell."),
+            },
+            {
+                stc: as_list("I have failed repeatedly, however, I haven't given up on my dreams."),
+                stc_cpy: as_list("I have failed repeatedly, however, I haven't given up on my dreams."),
+            },
+            {
+                stc: as_list("Life is full of challenges because they help us grow stronger."),
+                stc_cpy: as_list("Life is full of challenges because they help us grow stronger."),
+            },
+            {
+                stc: as_list("She decided to take the risk, although she was afraid of failure."),
+                stc_cpy: as_list("She decided to take the risk, although she was afraid of failure."),
+            },
+            {
+                stc: as_list("You can achieve anything, if you believe in yourself."),
+                stc_cpy: as_list("You can achieve anything, if you believe in yourself."),
+            },
+            {
+                stc: as_list("He missed the train, however, he managed to arrive on time."),
+                stc_cpy: as_list("He missed the train, however, he managed to arrive on time."),
+            },
+            {
+                stc: as_list("She couldn't attend the party because she was feeling unwell."),
+                stc_cpy: as_list("She couldn't attend the party because she was feeling unwell."),
+            },
+            {
+                stc: as_list("Although it's difficult, never stop pursuing your goals."),
+                stc_cpy: as_list("Although it's difficult, never stop pursuing your goals."),
+            },  
+            {
+                stc: as_list("She loves to read novels, but she also enjoys watching movies."),
+                stc_cpy: as_list("She loves to read novels, but she also enjoys watching movies."),
+            },
+            {
+                stc: as_list("He couldn't attend the meeting because he had a family emergency."),
+                stc_cpy: as_list("He couldn't attend the meeting because he had a family emergency."),
+            },
+            {
+                stc: as_list("If you study hard, you'll achieve good grades."),
+                stc_cpy: as_list("If you study hard, you'll achieve good grades."),
+            },
+            {
+                stc: as_list("Although it was raining heavily, they decided to go for a walk."),
+                stc_cpy: as_list("Although it was raining heavily, they decided to go for a walk."),
+            },
+            {
+                stc: as_list("The restaurant had excellent reviews; however, the prices were quite high."),
+                stc_cpy: as_list("The restaurant had excellent reviews; however, the prices were quite high."),
+            },
+            {
+                stc: as_list("She's a talented musician, but she's still learning to play the piano."),
+                stc_cpy: as_list("She's a talented musician, but she's still learning to play the piano."),
+            },
+            {
+                stc: as_list("He's a vegetarian, because he cares about animal welfare."),
+                stc_cpy: as_list("He's a vegetarian, because he cares about animal welfare."),
+            },
+            {
+                stc: as_list("She loves hinking, although she's afraid of heights."),
+                stc_cpy: as_list("She loves hinking, although she's afraid of heights."),
+            },
+            {
+                stc: as_list("He wanted to buy the new phone, however, he didn't have enough money."),
+                stc_cpy: as_list("He wanted to buy the new phone, however, he didn't have enough money."),
+            },
+            {
+                stc: as_list("The event canceled because of bad weather."),
+                stc_cpy: as_list("The event canceled because of bad weather."),
+            },
+            {
+                stc: as_list("She studies hard as she wants to get a scholarship."),
+                stc_cpy: as_list("She studies hard as she wants to get a scholarship."),
+            },
+            {
+                stc: as_list("He'll join the team if he meets the fitness requirements."),
+                stc_cpy: as_list("He'll join the team if he meets the fitness requirements."),
+            },
+            {
+                stc: as_list("Although it rained, we still went to the party."),
+                stc_cpy: as_list("Although it rained, we still went to the party."),
+            },
+            {
+                stc: as_list("They went to the beach, although the weather was cloudy."),
+                stc_cpy: as_list("They went to the beach, although the weather was cloudy."),
+            },
+            {
+                stc: as_list("Although I studied, the test was still difficult."),
+                stc_cpy: as_list("Although I studied, the test was still difficult."),
+            },
+            {
+                stc: as_list("I wanted to go to the cinema, but I'm too busy."),
+                stc_cpy: as_list("I wanted to go to the cinema, but I'm too busy."),
+            },
+            {
+                stc: as_list("She loves chocolate, but she can't eat it due to allergies."),
+                stc_cpy: as_list("She loves chocolate, but she can't eat it due to allergies."),
+            },  
+            {
+                stc: as_list("I was tired, but I decided to go to the gym anyway."),
+                stc_cpy: as_list("I was tired, but I decided to go to the gym anyway."),
+            },
+            {
+                stc: as_list("I know it's a challenge; however, I'm willing to try."),
+                stc_cpy: as_list("I know it's a challenge; however, I'm willing to try."),
+            },
+            {
+                stc: as_list("I didn't expect the outcome; however, I was surprised and happy."),
+                stc_cpy: as_list("I didn't expect the outcome; however, I was surprised and happy."),
+            },
+            {
+                stc: as_list("He is an excellent player. However, he needs to improve his endurance."),
+                stc_cpy: as_list("He is an excellent player. However, he needs to improve his endurance."),
+            },
+            {
+                stc: as_list("If it rains tomorrow, the picnic will be canceled."),
+                stc_cpy: as_list("If it rains tomorrow, the picnic will be canceled."),
+            },
+            {
+                stc: as_list("We would have serious problems if people cared about the environment."),
+                stc_cpy: as_list("We would have serious problems if people cared about the environment."),
+            },
+            {
+                stc: as_list("We would go out for dinner if my brother came earlier."),
+                stc_cpy: as_list("We would go out for dinner if my brother came earlier."),
+            },
+            {
+                stc: as_list("I didn't talk to my friend and he noticed it."),
+                stc_cpy: as_list("I didn't talk to my friend and he noticed it."),
+            },
+            {
+                stc: as_list("My friends entered the room and they found something scary."),
+                stc_cpy: as_list("My friends entered the room and they found something scary."),
+            },
+            {
+                stc: as_list("He's talented, but sometimes lacks self-confidence."),
+                stc_cpy: as_list("He's talented, but sometimes lacks self-confidence."),
+            }, 
+        ]
+        
+        const index = random_i(0, linkingWords.length)   
+        const stc = linkingWords[index].stc
+        const stc_copy = linkingWords[index].stc_cpy
+        const stc_size = stc.length 
+        const answerInput = document.getElementById("answer")
+        let answer = stc.join(" ")
+        
+        change_array_i_order(stc_copy)
+        createDiv(container, stc_size)       // criar tags equivalentes ao tamanho da frase selecionada
+        sentence_id.textContent = index + 1  // mostrar o índice da frase no array de frases
+        
+        const allLetters = document.querySelectorAll(".letter")
+        
+        allLetters.forEach((tag, i) => {
+            tag.textContent = stc_copy[i]
+        })
+
+        // Destacar tags das palavras ao clicar
+        allLetters.forEach((tag, i) => {
+            tag.addEventListener("click", () => {
+                if (tag.style.border === "1px solid white") {
+                    tag.style.border = "1px solid crimson"
+                } else if (tag.style.border = "1px solid crimson") {
+                    tag.style.border = "1px solid white"
+                }
+            })
+        })
+        
+        setInterval(() => {
+            personAnwser = answerInput.value
+            
+            if (answerInput.value == answer) {
+                allLetters.forEach((tag, i) => {
+                    tag.style.backgroundColor = "mediumseagreen"
+                    tag.style.boxShadow = "0 0 1rem mediumseagreen"
+                    tag.style.color = "black"
+                    tag.style.fontWeight = "bold"
+                    tag.style.border = "1px solid white"
+                })
+            }
+            else {
+                allLetters.forEach((tag, i) => {
+                    tag.style.backgroundColor = "inherit"
+                    tag.style.boxShadow = "inherit"
+                    tag.style.color = "inherit"
+                    tag.style.fontWeight = "inherit"
+                })
+            }
+        }, 1000)
+        
+    </script>
+</body>
+</html>

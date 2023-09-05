@@ -1,0 +1,402 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Movimentar cenário</title>
+</head>
+<body>
+  <canvas></canvas>
+  <script>
+
+    document.body.style.backgroundColor = 'black'
+    document.body.style.display = 'flex'
+    document.body.style.display = 'flex'
+    document.body.style.alignItems = 'center'
+    document.body.style.justifyContent = 'center'
+    document.body.style.minHeight = '100vh'
+
+    const canvas = document.querySelector('canvas')
+    const ctx = canvas.getContext('2d')
+
+    canvas.width = 1200
+    canvas.height = 600
+
+    function createPlayer() {
+      player = new Player()
+    }
+
+    function landscapeConfig({contentBox, imgRef, h, v}) {
+      let theImage = new Image()
+      theImage.src = imgRef
+
+      let newLandscape = new Landscape(
+        {
+          image: theImage,
+          x: h,
+          y: v,
+          width: theImage.width,
+          height: theImage.height
+        }
+      )
+      contentBox.push(newLandscape)
+    }
+    
+    function canvasAdd({content, contentBox}) {
+      if(content === 'landscape') {
+        contentBox.forEach(landscape => {
+          landscape.draw()
+        })
+      }
+    }
+    
+    // a_b
+    function interaction({reference, against}) {
+      if (against === 'landscape') {
+        reference.scenarioMotion({obstacle: landscapes, offset: 5}) // a_a
+      }
+    }
+
+    function init() {
+      landscapeConfig({contentBox: landscapes, imgRef: mainbackground, h: 0, v: 0}) 
+      landscapeConfig({contentBox: landscapes, imgRef: hills, h: 0, v: 0}) 
+      createPlayer()
+    }
+
+    function animate() {
+      ctx.fillStyle = '#222'
+      ctx.fillRect(0, 0, innerWidth, innerHeight)
+
+      canvasAdd({content: 'landscape', contentBox: landscapes})
+      
+      player.draw()
+      player.frameAdmin()
+      
+      player.horizontalOffset()
+      player.pressedRightOrLeft({horizontalOffsetSpeed: 5}) 
+
+      player.verticalOffset()           
+      player.fall({jumpOffsetSpeed: 1})
+
+      interaction({reference: player, against: 'landscape'}) // a_b
+      
+      requestAnimationFrame(animate)
+    }
+
+    class Player {
+      constructor() {
+        this.wolfSetup = {
+          
+          idleRight: {
+            widthList: [0, 178, 353, 526, 693, 864, 1039], 
+            widthList2: [178, 176, 173, 167, 170, 172, 176],
+            srcHeight: 167,
+            frameAmount: 6
+          },
+          
+          idleLeft: {
+            widthList: [0, 178, 353, 526, 693, 864, 1039], 
+            widthList2: [178, 176, 173, 167, 170, 172, 176],
+            srcHeight: 167,
+            frameAmount: 6
+          },
+          
+          walkRight: {
+            widthList: [0, 178, 356, 530, 710, 893, 1080, 1260, 1440], 
+            widthList2: [178, 178, 176, 178, 182, 182, 180, 180, 180],
+            srcHeight: 167,
+            frameAmount: 8
+          },
+          
+          walkLeft: {
+            widthList: [1440, 1265, 1087, 907, 722, 540, 360, 178, 0], 
+            widthList2: [180, 176, 176, 182, 182, 182, 180, 180, 180],
+            srcHeight: 167,
+            frameAmount: 8
+          }
+        }
+        
+        this.reference = new Image()
+        this.reference.src = 'img/player/wolf_idle_right.gif'
+        
+        this.surfaceHeight = 61
+        this.playerHeight = 60 
+        
+        this.image = this.reference                                                      
+        this.widthList = this.wolfSetup.idleRight.widthList                      
+        this.frameCounter = 0                                                  
+        this.fixedHeight = 0                                                   
+        this.widthList2 = this.wolfSetup.idleRight.widthList2                  
+        this.srcHeight = this.wolfSetup.idleRight.srcHeight                    
+        this.whereX = 100                                                       
+        this.whereY = canvas.height - (this.playerHeight + this.surfaceHeight) 
+        this.canvasWidth = 60                                                  
+        this.canvasHeight = 60                                                 
+        
+        this.modularCounter = 0                                                
+        this.modular = 5                                                        
+        this.frameAmount = this.wolfSetup.idleRight.frameAmount
+        
+        this.keys = {
+          d: { pressed: false },
+          a: { pressed: false },
+          w: { pressed: false }
+        }
+
+        this.speed = {x: 0, y: 0}
+      }
+
+      draw() {
+        ctx.drawImage(
+          this.image,
+          this.widthList[this.frameCounter],
+          this.fixedHeight,
+          this.widthList2[this.frameCounter],
+          this.srcHeight,
+          this.whereX,
+          this.whereY,
+          this.canvasWidth,
+          this.canvasHeight
+        )
+      }
+
+      timeToLoadNextImage() {
+        return this.modularCounter % this.modular === 0
+      }
+
+      isInsideThreshold() {
+        return this.frameCounter < this.frameAmount
+      }
+
+      keepChangingSprites() {
+        this.frameCounter++
+      }
+
+      resetSpritesCountage() {
+        this.frameCounter = 0
+      }
+
+      frameCounterReachesThreshold(maxValue) {
+        return this.modularCounter == maxValue
+      }
+
+      resetFrameCounter() {
+        this.modularCounter = 0
+      }
+
+      frameAdmin() {
+        this.modularCounter++
+
+        if (this.timeToLoadNextImage()) {
+          if (this.isInsideThreshold()) {
+            this.keepChangingSprites()
+          } else {
+            this.resetSpritesCountage()
+          }
+        }
+        
+        if (this.frameCounterReachesThreshold(25)) {
+          this.resetFrameCounter()
+        }
+      }
+
+      horizontalOffset() {
+        this.whereX += this.speed.x
+      }
+      
+      pressedRightOrLeft({horizontalOffsetSpeed}) {
+        const goLeft = -horizontalOffsetSpeed
+        const goRight = horizontalOffsetSpeed
+        const goIdle = 0
+
+        let rightBoundary = canvas.width / 1.7 
+        let leftBoundary = canvas.width / 4    
+        let playerCanGoRight = this.whereX < rightBoundary
+        let playerCanGoLeft = this.whereX > leftBoundary
+        let playerMovesLeft = this.keys.a.pressed
+        let playerMovesRight = this.keys.d.pressed
+        
+        if (playerMovesLeft && playerCanGoLeft) {
+          this.speed.x = goLeft
+          
+        } else if (playerMovesRight && playerCanGoRight) {
+          this.speed.x = goRight
+          
+        } else {
+          this.speed.x = goIdle
+          
+        }
+      }
+
+      verticalOffset() {
+        this.whereY += this.speed.y
+      }
+
+      pressedUpOrDown({verticalOffsetSpeed}) {
+        const goUp = -verticalOffsetSpeed
+        
+        if (this.keys.w.pressed) {
+          this.speed.y = goUp
+        } else {
+          this.speed.y = 0
+        }
+      }
+
+      fall({jumpOffsetSpeed}) {
+        const goUp = jumpOffsetSpeed
+        const idle = 0
+        
+        if (this.whereY + this.playerHeight + this.surfaceHeight + this.speed.y <= canvas.height) {
+          this.speed.y += goUp
+        } 
+        else {
+          this.speed.y = idle
+        }
+      }
+
+      loadSprite(action) {
+        if (action === 'idle_right') {
+          this.reference = new Image()
+          this.reference.src = 'img/player/wolf_idle_right.gif'
+          this.image = this.reference
+          this.widthList = this.wolfSetup.idleRight.widthList
+          this.widthList2 = this.wolfSetup.idleRight.widthList2
+          this.srcHeight = this.wolfSetup.idleRight.srcHeight
+          this.frameAmount = this.wolfSetup.idleRight.frameAmount
+        } 
+        
+        else if (action === 'idle_left') {
+          this.reference = new Image()
+          this.reference.src = 'img/player/wolf_idle_left.gif'
+          this.image = this.reference
+          this.widthList = this.wolfSetup.idleLeft.widthList
+          this.widthList2 = this.wolfSetup.idleLeft.widthList2
+          this.srcHeight = this.wolfSetup.idleLeft.srcHeight
+          this.frameAmount = this.wolfSetup.idleLeft.frameAmount
+        } 
+        
+        else if (action === 'walk_right') {
+          this.reference = new Image()
+          this.reference.src = 'img/player/wolf_walk_right.gif'
+          this.image = this.reference
+          this.widthList = this.wolfSetup.walkRight.widthList
+          this.widthList2 = this.wolfSetup.walkRight.widthList2
+          this.srcHeight = this.wolfSetup.walkRight.srcHeight
+          this.frameAmount = this.wolfSetup.walkRight.frameAmount
+        } 
+        
+        else if (action === 'walk_left') {
+          this.reference = new Image()
+          this.reference.src = 'img/player/wolf_walk_left.gif'
+          this.image = this.reference
+          this.widthList = this.wolfSetup.walkLeft.widthList
+          this.widthList2 = this.wolfSetup.walkLeft.widthList2
+          this.srcHeight = this.wolfSetup.walkLeft.srcHeight
+          this.frameAmount = this.wolfSetup.walkLeft.frameAmount
+        } 
+      }
+
+      manner(state) {
+        if (state == 'idle_facing_right') {
+          this.keys.d.pressed = false
+          return this.keys.d.pressed
+        }
+        
+        else if (state == 'idle_facing_left') {
+          this.keys.a.pressed = false
+          return this.keys.a.pressed
+        }
+        
+        else if (state == 'walking_right') {
+          this.keys.d.pressed = true
+          return this.keys.d.pressed
+        }
+        
+        else if (state == 'walking_left') {
+          this.keys.a.pressed = true
+          return this.keys.a.pressed
+        }
+      }
+    
+      // a_a: Mover os elementos do canvas (cenários + objetos) em seus atributos "x" na direção oposta a do jogador
+      scenarioMotion({obstacle, offset}) {
+        if (this.keys.d.pressed) {
+          obstacle.forEach(index => {
+            index.x -= offset
+          })
+        } 
+        else if (this.keys.a.pressed) {
+          obstacle.forEach(index => {
+            index.x += offset
+          })
+        }}
+    }
+
+    class Landscape {
+      constructor({image, x, y, width, height}) {
+        this.image = image
+        this.x = x
+        this.y = y
+        this.width = width
+        this.height = height
+      }
+
+      draw() {
+        ctx.drawImage(this.image, this.x, this.y, this.width, this.height)  
+      }
+    } 
+    
+    let player = undefined
+    let landscapes = []
+
+    const mainbackground = 'img/background/background.png'
+    const hills = 'img/background/hills.png'
+    
+    init()
+    animate()
+    
+    addEventListener('keyup', ({ key }) => {
+    switch (key) {
+      
+      case 'd':
+        player.manner('idle_facing_right')
+        player.loadSprite('idle_right')
+        break
+      
+      case 'a':
+        player.manner('idle_facing_left')
+        player.loadSprite('idle_left')
+        break
+      
+      case 'w':
+        player.keys.w.pressed = false
+        break
+      }
+    })
+
+    addEventListener('keydown', ({ key }) => {
+      switch (key) {
+
+        case 'd':
+          player.manner('walking_right')
+          player.loadSprite('walk_right')
+          break
+
+        case 'a':
+          player.manner('walking_left')
+          player.loadSprite('walk_left')
+          break
+        
+        case 'w':
+          player.keys.w.pressed = true
+          player.pressedUpOrDown({verticalOffsetSpeed: 20}) 
+          break
+      }
+    })
+  
+  </script>
+</body>
+</html>
